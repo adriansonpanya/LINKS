@@ -1,0 +1,46 @@
+SELECT DISTINCT fach 						> DISTINCT = ausschließliche Auswahl, ohne Duplikate 
+FROM prueft							> von welcher Tabelle 
+WHERE raum IS NULL						> welche Anweisung / WHERE kann mit Select, Update, etc. kombiniert werden
+
+z.B. WHERE raum = "M1.01";
+
+UPDATE		prueft  					> welche Datenbank
+SET		raum = "M2.02"					> was soll verändert werden
+WHERE 		fach = "Netz2" is NULL  			> Anweisung 
+
+SELECT 		spalte1, spalte2
+FROM		tabelle1
+WHERE 		spalte1 NOT IN (SELECT spalte1 FROM tabelle2)	> welche daten(spalte1) von tabelle1 nicht in tabelle2 sind 	
+
+
+
+
+INNER JOIN							> gibt die daten aus, die in der 1. tabelle und in der 2. tabelle ünereinstimmen
+LEFT JOIN							> gibt alles aus der 1. tabelle aus und alle daten, die mit der 2. tabelle übereinstimmen
+
+z.B. 	SELECT Orders.o_id, Customers.c_name
+	FROM Orders
+	INNER JOIN Customers ON Orders.c_id = Customers.c_id;  
+
+
+
+VIEW 								> eine virtuelle Datenbank, die reelle Daten aus den vorgegebenen Datenbanken ausgibt
+
+
+DROP VIEW IF EXISTS prof_info;
+CREATE VIEW prof_info (student, s_id) AS
+SELECT s.name, s.s_id
+FROM student s
+WHERE s_id IN (SELECT s_id FROM prueft);
+
+
+DROP VIEW IF EXISTS prof_info;
+CREATE VIEW prof_info (student, student_id, studien_name) AS
+SELECT s.name, s.s_id, stg.name
+FROM student s LEFT JOIN prueft prf USING (s_id)
+               LEFT JOIN studiengang stg USING (stg_id);
+
+
+SELECT 
+FROM
+WHERE anzahl >= ALL (SELECT anzahl FROM student_info)		> Mengenvergleich
